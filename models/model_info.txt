@@ -1,0 +1,2 @@
+best_model=LogisticRegression
+test_roc_auc=0.8451
