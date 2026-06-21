@@ -32,18 +32,7 @@ churn_prediction/
 This project is built around the [Telco Customer Churn dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn).
 Download it and place the CSV at `data/raw/telco_churn.csv`.
 
-**No dataset yet?** `data_ingestion.py` will auto-generate a synthetic dataset
-with the same schema if `data/raw/telco_churn.csv` isn't found, so you can run
-the full pipeline immediately. Swap in the real CSV later — no code changes
-needed.
 
-## Setup
-
-```bash
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
 
 ## Run the pipeline
 
@@ -103,14 +92,3 @@ Response:
 }
 ```
 
-## Design notes / what I'd improve
-
-- Class imbalance is handled via `class_weight="balanced"` (Logistic Regression)
-  and could be improved further with SMOTE for XGBoost in a v2.
-- The preprocessing pipeline is fit once and reused identically at training
-  and inference time (saved via joblib) to avoid train/serve skew.
-- Model selection is by test-set ROC-AUC; in production I'd also weigh
-  precision/recall trade-offs against the actual cost of a false negative
-  (losing a customer) vs false positive (wasted retention offer).
-- SHAP is used for global feature importance here; a production version
-  would expose per-customer SHAP explanations alongside each prediction.
