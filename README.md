@@ -4,6 +4,16 @@ End-to-end churn prediction project: data cleaning, EDA, feature engineering,
 model comparison (Logistic Regression vs XGBoost) with cross-validation,
 SHAP explainability, and a FastAPI service for real-time inference.
 
+## Dataset
+
+This project is built around the [Telco Customer Churn dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn).
+Download it and place the CSV at `data/raw/telco_churn.csv`.
+
+
+## 🛠️ Tech Stack
+
+**Python, Pandas, NumPy, Scikit-learn, XGBoost, SHAP, FastAPI, Pydantic, Matplotlib**
+
 ## Project structure
 
 ```
@@ -27,68 +37,50 @@ churn_prediction/
 └── requirements.txt
 ```
 
-## Dataset
-
-This project is built around the [Telco Customer Churn dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn).
-Download it and place the CSV at `data/raw/telco_churn.csv`.
 
 
+## 🚀 Highlights
 
-## Run the pipeline
+* Built a complete ML pipeline covering data cleaning, feature engineering, model training, explainability, and deployment.
+* Compared Logistic Regression and XGBoost using 5-fold cross-validation and achieved **84.51% ROC-AUC**.
+* Used **SHAP** to identify key churn drivers such as contract type and tenure.
+* Deployed the model using **FastAPI** with **Pydantic** validation for real-time predictions.
+
+
+
+
+## ▶️ Run the Project
 
 ```bash
-# 1. Clean the raw data
 python src/data_ingestion.py
-
-# 2. Fit and save the preprocessing pipeline
 python src/feature_engineering.py
-
-# 3. Train, compare models, generate SHAP/ROC/confusion matrix plots
 python src/train.py
 ```
 
-This produces:
-- `models/best_model.joblib` — the better-performing model (by test ROC-AUC)
-- `models/preprocessor.joblib` — fitted preprocessing pipeline
-- `reports/roc_curve_comparison.png`
-- `reports/confusion_matrix_best_model.png`
-- `reports/shap_summary_<model>.png`
-
-## Run the API
+Start API:
 
 ```bash
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload
 ```
 
-Visit `http://127.0.0.1:8000/docs` for interactive Swagger UI, or test it
-with the included script:
+Swagger Docs:
 
-```bash
-python tests/test_api.py
+```text
+http://127.0.0.1:8000/docs
 ```
 
-Example request:
+## 📈 Results
 
-```bash
-curl -X POST http://127.0.0.1:8000/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "gender": "Female", "SeniorCitizen": 0, "Partner": "Yes", "Dependents": "No",
-    "tenure": 5, "PhoneService": "Yes", "MultipleLines": "No",
-    "InternetService": "Fiber optic", "OnlineSecurity": "No", "OnlineBackup": "No",
-    "DeviceProtection": "No", "TechSupport": "No", "StreamingTV": "Yes",
-    "StreamingMovies": "No", "Contract": "Month-to-month", "PaperlessBilling": "Yes",
-    "PaymentMethod": "Electronic check", "MonthlyCharges": 85.5, "TotalCharges": 420.0
-  }'
-```
+| Metric         | Value                   |
+| -------------- | ----------------------- |
+| Best Model     | Logistic Regression     |
+| ROC-AUC        | 84.51%                  |
+| Validation     | 5-Fold Cross Validation |
+| Explainability | SHAP                    |
 
-Response:
+## 🔮 Future Improvements
 
-```json
-{
-  "churn_prediction": "Yes",
-  "churn_probability": 0.78,
-  "risk_tier": "High"
-}
-```
-
+* MLflow Experiment Tracking
+* Docker Deployment
+* Hyperparameter Tuning
+* Model Monitoring & Drift Detection
